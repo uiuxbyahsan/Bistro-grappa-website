@@ -1,0 +1,103 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --forest: #04301b;
+  --forest-deep: #04301b;
+  --cream: #f5edd8;
+  --gold: #f2b418;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  background-color: var(--cream);
+  color: var(--forest);
+  font-family: var(--font-inter), system-ui, sans-serif;
+  overflow-x: hidden;
+}
+
+/* Anchor offset so sticky navbar never covers section headings */
+section[id] {
+  scroll-margin-top: 84px;
+}
+
+@layer components {
+  /* ---- Buttons ---------------------------------------------------- */
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-full px-8 py-4
+      font-sans text-sm font-bold uppercase tracking-[0.16em]
+      transition-all duration-300 ease-out;
+  }
+  .btn-gold {
+    @apply bg-gold text-forest hover:bg-gold-soft hover:-translate-y-0.5;
+  }
+  .btn-forest {
+    @apply bg-forest text-white hover:bg-forest-deep hover:-translate-y-0.5;
+  }
+  .btn-outline-light {
+    @apply border-2 border-white/80 text-white hover:bg-white hover:text-forest;
+  }
+  .btn-outline-forest {
+    @apply border-2 border-forest text-forest hover:bg-gold hover:border-gold hover:text-forest;
+  }
+
+  /* ---- Section label (eyebrow) ----------------------------------- */
+  .eyebrow {
+    @apply font-sans text-xs font-semibold uppercase tracking-[0.32em] text-gold;
+  }
+
+  /* ---- Display heading ------------------------------------------- */
+  .display {
+    @apply font-display font-bold leading-[1.04] tracking-[0.02em];
+  }
+}
+
+@layer utilities {
+  .font-display {
+    font-family: var(--font-segoe), "Segoe Print", "Bradley Hand", cursive;
+  }
+
+  /* Dotted leader between a menu item name and its price */
+  .leader {
+    flex: 1;
+    margin: 0 0.6rem 0.35rem;
+    border-bottom: 2px dotted rgba(4, 48, 27, 0.35);
+  }
+  .leader-light {
+    border-bottom-color: rgba(245, 237, 216, 0.32);
+  }
+}
+
+/* ---- Marquee seam ------------------------------------------------- */
+.marquee-track {
+  display: flex;
+  width: max-content;
+  will-change: transform;
+}
+.marquee-mask:hover .marquee-track {
+  animation-play-state: paused;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  .animate-marquee {
+    animation: none !important;
+  }
+}
+
+/* Reservation form fields */
+.field {
+  @apply w-full rounded-xl border border-forest/15 bg-cream-soft px-4 py-3
+    font-sans text-sm text-forest placeholder:text-forest/45
+    outline-none transition focus:border-gold focus:ring-2 focus:ring-gold/35;
+}
+.field-label {
+  @apply mb-1.5 block font-sans text-xs font-semibold uppercase tracking-[0.16em] text-forest/70;
+}
