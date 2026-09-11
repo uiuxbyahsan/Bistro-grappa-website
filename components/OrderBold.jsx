@@ -2,8 +2,7 @@
 
 import { motion } from "framer-motion";
 import { Reveal } from "./Reveal";
-
-const WORDS = ["ORDER", "BOLD", "BISTRO", "FLAVOR"];
+import { useLanguage } from "@/lib/LanguageContext";
 
 const IMAGES = [
   { src: "/assets/food/special-tuna.jpg", alt: "Sesame-crusted tuna with herb purée", rot: -4 },
@@ -12,14 +11,15 @@ const IMAGES = [
 ];
 
 export default function OrderBold() {
+  const { t } = useLanguage();
   return (
     <section className="relative bg-cream">
       <div className="mx-auto grid max-w-7xl items-center gap-12 px-5 py-20 sm:px-8 sm:py-32 lg:grid-cols-2 lg:gap-16">
         {/* left: stacked headline */}
         <Reveal>
           <h2 className="display text-[clamp(2.75rem,9vw,6rem)] leading-[0.95] text-forest">
-            {WORDS.map((w) => (
-              <span key={w} className="block">
+            {t.orderBold.words.map((w, i) => (
+              <span key={i} className="block">
                 {w}
               </span>
             ))}
@@ -29,17 +29,15 @@ export default function OrderBold() {
         {/* right: copy + CTAs + collage */}
         <div>
           <Reveal as="p" className="max-w-md font-serif text-lg italic leading-relaxed text-forest">
-            Book your table and experience Sarajevo&apos;s most thoughtful bistro
-            — fresh ingredients, handcrafted dishes, and a riverside atmosphere
-            unlike anywhere else.
+            {t.orderBold.paragraph}
           </Reveal>
 
           <Reveal delay={0.08} className="mt-7 flex flex-col gap-3 sm:flex-row">
             <a href="#reservations" className="btn btn-gold w-full sm:w-auto">
-              Reserve a Table
+              {t.orderBold.ctaReserve}
             </a>
             <a href="#menu" className="btn btn-outline-forest w-full sm:w-auto">
-              View Full Menu
+              {t.orderBold.ctaMenu}
             </a>
           </Reveal>
 

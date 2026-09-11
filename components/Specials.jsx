@@ -2,23 +2,25 @@
 
 import { motion } from "framer-motion";
 import { Reveal } from "./Reveal";
+import { useLanguage } from "@/lib/LanguageContext";
 
-// Named + priced dishes; everything else is a "Bistro Grappa" atmosphere card.
-const NAMED = {
-  "special-ribeye": { name: "Rib Eye Steak", price: "25.00" },
-  "special-tuna": { name: "Tuna Filet", price: "26.00" },
-  "special-truffle-pasta": { name: "Truffle Pasta", price: "13.00" },
-  "gallery-chicken-rice": { name: "Chicken Filet", price: "15.00" },
-  "gallery-platter": { name: "Slow-Roasted Veal Shoulder", price: "30.00" },
-  "gallery-carpaccio": { name: "Beef Carpaccio", price: "19.00" },
-  "about-carpaccio-board": { name: "Red Trout Carpaccio", price: "18.00" },
-  "about-feta-salad": { name: "Cheese Selection", price: "20.00" },
-  "gallery-chicken-pasta": { name: "Chicken Pasta", price: "13.00" },
-  "hero-pasta": { name: "Rib Eye Pasta", price: "16.00" },
-  "hero-risotto": { name: "Mozzarella Pasta", price: "14.00" },
-  "gallery-omelette": { name: "Omelette", price: "7.50" },
-  "gallery-salad-seeds": { name: "Chicken Salad", price: "14.00" },
-  "why-tuna-salad": { name: "Tuna Salad", price: "17.00" },
+// Priced dishes keyed by their (stable) image id; translated names live in the
+// dictionary under specials.items[id]. Everything else is an atmosphere card.
+const PRICES = {
+  "special-ribeye": "25.00",
+  "special-tuna": "26.00",
+  "special-truffle-pasta": "13.00",
+  "gallery-chicken-rice": "15.00",
+  "gallery-platter": "30.00",
+  "gallery-carpaccio": "19.00",
+  "about-carpaccio-board": "18.00",
+  "about-feta-salad": "20.00",
+  "gallery-chicken-pasta": "13.00",
+  "hero-pasta": "16.00",
+  "hero-risotto": "14.00",
+  "gallery-omelette": "7.50",
+  "gallery-salad-seeds": "14.00",
+  "why-tuna-salad": "17.00",
 };
 
 const FOOD = [
@@ -31,16 +33,17 @@ const FOOD = [
   "why-cocktail", "why-tuna-salad",
 ];
 
-const CARDS = FOOD.map((f) => {
-  const m = NAMED[f];
-  return {
-    src: `/assets/food/${f}.jpg`,
-    name: m ? m.name : "Chef's Special",
-    priceText: m ? `${m.price} KM` : "Market Price",
-  };
-});
+// Structural card data: id + image + price. Names/labels come from `t`.
+const CARDS = FOOD.map((f) => ({
+  id: f,
+  src: `/assets/food/${f}.jpg`,
+  price: PRICES[f] || null,
+}));
 
 function SpecialCard({ card, index }) {
+  const { t } = useLanguage();
+  const name = t.specials.items[card.id] || t.specials.chefSpecial;
+  const priceText = card.price ? `${card.price} KM` : t.specials.marketPrice;
   return (
     <motion.div
       className="mr-6 shrink-0 cursor-pointer rounded-2xl bg-white p-2 shadow-xl transition-shadow hover:shadow-2xl sm:p-2.5"
@@ -50,7 +53,7 @@ function SpecialCard({ card, index }) {
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
         src={card.src}
-        alt={card.name}
+        alt={name}
         loading="lazy"
         decoding="async"
         draggable={false}
@@ -61,9 +64,9 @@ function SpecialCard({ card, index }) {
         className="mt-3 text-center font-display text-[15px] font-bold uppercase text-forest"
         style={{ letterSpacing: "0.05em" }}
       >
-        {card.name}
+        {name}
       </h3>
-      <p className="mt-1 text-center font-sans text-[15px] font-bold text-gold">{card.priceText}</p>
+      <p className="mt-1 text-center font-sans text-[15px] font-bold text-gold">{priceText}</p>
     </motion.div>
   );
 }
@@ -79,15 +82,16 @@ function CardSet({ ariaHidden = false }) {
 }
 
 export default function Specials() {
+  const { t } = useLanguage();
   return (
     <section className="relative overflow-hidden bg-forest text-white">
       <div className="py-20 sm:py-32">
         <div className="px-5 text-center sm:px-8">
           <Reveal as="p" className="eyebrow">
-            Chef&apos;s Picks
+            {t.specials.eyebrow}
           </Reveal>
           <Reveal as="h2" delay={0.05} className="display mt-3 text-[clamp(2.5rem,6vw,4.5rem)]">
-            Grappa Specials
+            {t.specials.heading}
           </Reveal>
         </div>
 

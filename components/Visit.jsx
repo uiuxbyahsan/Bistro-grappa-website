@@ -1,19 +1,23 @@
+"use client";
+
 import { Reveal } from "./Reveal";
 import ReservationForm from "./ReservationForm";
 import { IconPin, IconInstagram, IconFacebook } from "./Icons";
 import { CONTACT } from "@/lib/site";
+import { useLanguage } from "@/lib/LanguageContext";
 
 export default function Visit() {
+  const { t } = useLanguage();
   return (
     <section id="visit" className="relative bg-forest text-white">
       <div className="mx-auto grid max-w-7xl gap-12 px-5 py-20 sm:px-8 sm:py-32 lg:grid-cols-2 lg:gap-16">
         {/* left: find us */}
         <div>
           <Reveal as="p" className="eyebrow">
-            Visit Us
+            {t.visit.eyebrow}
           </Reveal>
           <Reveal as="h2" delay={0.05} className="display mt-3 text-[clamp(2.5rem,6vw,4.5rem)]">
-            Come Find Us
+            {t.visit.heading}
           </Reveal>
 
           <Reveal delay={0.1} className="mt-7 space-y-4">

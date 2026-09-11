@@ -3,8 +3,11 @@
 import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { NAV_LINKS } from "@/lib/site";
+import { useLanguage } from "@/lib/LanguageContext";
+import LanguageSwitcher from "./LanguageSwitcher";
 
 export default function Navbar() {
+  const { t } = useLanguage();
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
 
@@ -50,15 +53,19 @@ export default function Navbar() {
                 href={l.href}
                 className="font-sans text-[0.78rem] font-medium uppercase tracking-[0.2em] text-white/85 transition-colors hover:text-gold"
               >
-                {l.label}
+                {t.nav.links[l.key]}
               </a>
             </li>
           ))}
         </ul>
 
         <div className="flex items-center gap-3">
+          <div className="hidden lg:block">
+            <LanguageSwitcher variant="desktop" />
+          </div>
+
           <a href="#reservations" className="btn btn-gold hidden sm:inline-flex">
-            Reserve a Table
+            {t.nav.cta}
           </a>
 
           <button
@@ -106,17 +113,23 @@ export default function Navbar() {
                     onClick={() => setOpen(false)}
                     className="block rounded-lg px-3 py-3 font-sans text-sm uppercase tracking-[0.2em] text-white/85 transition-colors hover:bg-white/5 hover:text-gold"
                   >
-                    {l.label}
+                    {t.nav.links[l.key]}
                   </a>
                 </li>
               ))}
+              <li className="border-t border-white/10 pt-2">
+                <LanguageSwitcher
+                  variant="mobile"
+                  onSelect={() => setOpen(false)}
+                />
+              </li>
               <li className="px-3 pb-2 pt-3">
                 <a
                   href="#reservations"
                   onClick={() => setOpen(false)}
                   className="btn btn-gold w-full"
                 >
-                  Reserve a Table
+                  {t.nav.cta}
                 </a>
               </li>
             </ul>

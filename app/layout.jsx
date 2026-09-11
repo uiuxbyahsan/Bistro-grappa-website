@@ -1,5 +1,6 @@
 import "./globals.css";
 import { segoePrint, playfair, inter } from "./fonts";
+import { LanguageProvider } from "@/lib/LanguageContext";
 
 const SITE_URL = "https://bistrograppa.ba";
 
@@ -83,7 +84,7 @@ const restaurantJsonLd = {
 export default function RootLayout({ children }) {
   return (
     <html
-      lang="en"
+      lang="bs"
       className={`${segoePrint.variable} ${playfair.variable} ${inter.variable}`}
     >
       <body className="antialiased">
@@ -92,7 +93,7 @@ export default function RootLayout({ children }) {
           dangerouslySetInnerHTML={{ __html: JSON.stringify(restaurantJsonLd) }}
         />
 
-        {children}
+        <LanguageProvider>{children}</LanguageProvider>
       </body>
     </html>
   );

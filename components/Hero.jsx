@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { IconArrow } from "./Icons";
+import { useLanguage } from "@/lib/LanguageContext";
 
 const EASE = [0.22, 1, 0.36, 1];
 
@@ -89,6 +90,7 @@ function HeroCard({ card, i }) {
 }
 
 export default function Hero() {
+  const { t } = useLanguage();
   return (
     <section
       id="top"
@@ -177,8 +179,9 @@ export default function Hero() {
           animate="show"
           className="display text-balance text-[clamp(3rem,9vw,6rem)]"
         >
-          Where Every Bite
-          <br className="hidden sm:block" /> Tells a Story
+          {t.hero.title.pre}
+          <span className="italic">{t.hero.title.em}</span>
+          {t.hero.title.post}
         </motion.h1>
 
         <motion.p
@@ -188,7 +191,7 @@ export default function Hero() {
           animate="show"
           className="mt-6 max-w-xl font-serif text-lg italic text-cream/85 sm:text-xl"
         >
-          Bistro dining done right — fresh, bold, soulful.
+          {t.hero.subtitle}
         </motion.p>
 
         <motion.div
@@ -199,11 +202,11 @@ export default function Hero() {
           className="mt-9 flex flex-col items-center gap-3 sm:flex-row"
         >
           <a href="#menu" className="btn btn-gold w-full sm:w-auto">
-            View Menu
+            {t.hero.ctaMenu}
             <IconArrow className="h-4 w-4" />
           </a>
           <a href="#reservations" className="btn btn-outline-light w-full sm:w-auto">
-            Make a Reservation
+            {t.hero.ctaReserve}
           </a>
         </motion.div>
       </div>

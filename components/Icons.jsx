@@ -130,6 +130,14 @@ export function IconArrow({ className = "h-4 w-4", ...p }) {
   );
 }
 
+export function IconChevronDown({ className = "h-4 w-4", ...p }) {
+  return (
+    <svg className={className} {...base} {...p}>
+      <path d="M6 9l6 6 6-6" />
+    </svg>
+  );
+}
+
 export function IconUtensils({ className = "h-5 w-5", ...p }) {
   return (
     <svg className={className} {...base} {...p}>

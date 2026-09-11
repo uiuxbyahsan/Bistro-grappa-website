@@ -1,7 +1,11 @@
+"use client";
+
 import FramePhoto from "./FramePhoto";
 import { Reveal } from "./Reveal";
+import { useLanguage } from "@/lib/LanguageContext";
 
 export default function About() {
+  const { t } = useLanguage();
   return (
     <section id="about" className="relative bg-cream">
       <div className="mx-auto grid max-w-7xl items-center gap-12 px-5 py-20 sm:px-8 sm:py-32 lg:grid-cols-[55fr_45fr] lg:gap-16">
@@ -33,19 +37,17 @@ export default function About() {
 
         {/* right: text block */}
         <Reveal className="order-1 lg:order-2">
-          <h2 className="display text-[clamp(3rem,7vw,4rem)] text-forest">ABOUT</h2>
+          <h2 className="display text-[clamp(3rem,7vw,4rem)] text-forest">
+            {t.about.heading}
+          </h2>
           <p className="mt-6 max-w-xl font-sans text-base leading-[1.7] text-forest/90">
-            Grappa is inspired by the warmth of Sarajevo — honest ingredients,
-            bold flavors, attentive service, and food made fresh every single
-            day.
+            {t.about.p1}
           </p>
           <p className="mt-4 max-w-xl font-sans text-base leading-[1.7] text-forest/90">
-            From slow-roasted veal to handmade pasta and fresh trout, every dish
-            is crafted with fresh ingredients, riverside atmosphere, and
-            unforgettable flavor.
+            {t.about.p2}
           </p>
           <a href="#taste" className="btn btn-gold mt-8">
-            Explore The Difference
+            {t.about.cta}
           </a>
         </Reveal>
       </div>

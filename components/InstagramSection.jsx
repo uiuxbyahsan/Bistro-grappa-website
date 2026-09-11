@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import { Reveal } from "./Reveal";
 import { IconInstagram, IconArrow, IconPlay, IconEye, IconHeart } from "./Icons";
 import { CONTACT, INSTAGRAM_POSTS } from "@/lib/site";
+import { useLanguage } from "@/lib/LanguageContext";
 
 // Static, decorative engagement numbers — different per reel.
 const STATS = [
@@ -69,15 +70,16 @@ function Reel({ reel, index }) {
 }
 
 export default function InstagramSection() {
+  const { t } = useLanguage();
   return (
     <section className="relative bg-cream">
       <div className="mx-auto max-w-7xl px-5 py-20 sm:px-8 sm:py-32">
         <div className="text-center">
           <Reveal as="h2" className="display text-[clamp(2.5rem,6vw,4.5rem)] text-forest">
-            Follow Our Story
+            {t.instagram.heading}
           </Reveal>
           <Reveal as="p" delay={0.05} className="mt-3 font-serif text-lg italic text-forest/65">
-            {CONTACT.instagramHandle} on Instagram
+            {CONTACT.instagramHandle} {t.instagram.handleSuffix}
           </Reveal>
         </div>
 
@@ -94,7 +96,7 @@ export default function InstagramSection() {
             rel="noopener noreferrer"
             className="btn btn-gold"
           >
-            View More on Instagram
+            {t.instagram.cta}
             <IconArrow className="h-4 w-4" />
           </a>
         </Reveal>

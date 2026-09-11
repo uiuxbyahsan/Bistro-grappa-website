@@ -1,6 +1,9 @@
+"use client";
+
 import { Reveal } from "./Reveal";
 import { IconStar } from "./Icons";
 import { REVIEWS } from "@/lib/site";
+import { useLanguage } from "@/lib/LanguageContext";
 
 const initials = (name) =>
   name
@@ -21,6 +24,7 @@ function Stars({ rating = 5, className = "" }) {
 }
 
 function Card({ review, index }) {
+  const { t } = useLanguage();
   return (
     <article
       className="mr-6 flex w-80 shrink-0 flex-col rounded-2xl border border-black/[0.08] bg-white p-6"
@@ -34,10 +38,14 @@ function Card({ review, index }) {
         </div>
         <div>
           <p className="font-sans text-[15px] font-bold text-forest">{review.name}</p>
-          <p className="font-sans text-[13px] text-[#888]">{review.source}</p>
+          <p className="font-sans text-[13px] text-[#888]">
+            {t.reviews.sources[review.sourceKey]}
+          </p>
         </div>
       </div>
-      <p className="mt-4 font-serif text-sm leading-[1.6] text-forest">{review.text}</p>
+      <p className="mt-4 font-serif text-sm leading-[1.6] text-forest">
+        {t.reviews.items[review.id]}
+      </p>
       <div className="mt-5 border-t border-black/[0.06] pt-4">
         <Stars rating={review.rating} />
       </div>
@@ -46,6 +54,7 @@ function Card({ review, index }) {
 }
 
 export default function Reviews() {
+  const { t } = useLanguage();
   return (
     <section className="relative overflow-hidden bg-cream">
       <div className="py-20 sm:py-32">
@@ -53,10 +62,10 @@ export default function Reviews() {
         <Reveal className="mx-auto mb-12 flex max-w-6xl flex-col gap-6 px-5 sm:px-8 md:flex-row md:items-center md:justify-between">
           <div>
             <p className="display text-[clamp(2rem,5vw,2.5rem)] leading-[1.05] text-forest">
-              Trusted by
+              {t.reviews.trustedBy}
             </p>
             <p className="display text-[clamp(2rem,5vw,2.5rem)] leading-[1.05] text-gold">
-              500+ guests
+              {t.reviews.guests}
             </p>
           </div>
           <div className="hidden items-center gap-3 sm:gap-4 md:flex">

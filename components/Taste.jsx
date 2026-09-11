@@ -1,35 +1,41 @@
+"use client";
+
 import FramePhoto from "./FramePhoto";
 import { Reveal, RevealGroup, RevealItem } from "./Reveal";
 import { TASTE_PROPS } from "@/lib/site";
+import { useLanguage } from "@/lib/LanguageContext";
 
 function Prop({ item, side }) {
+  const { t } = useLanguage();
+  const copy = t.taste.props[item.icon];
   const right = side === "right"; // visually anchored to the right column
   return (
     <RevealItem className={right ? "lg:text-right" : ""}>
       <h3 className="font-display text-xl font-bold uppercase tracking-[0.02em] text-white">
-        {item.title}
+        {copy.title}
       </h3>
       <p className="mt-1.5 font-sans text-base leading-relaxed text-cream/70">
-        {item.text}
+        {copy.text}
       </p>
     </RevealItem>
   );
 }
 
 export default function Taste() {
+  const { t } = useLanguage();
   const [a, b, c, d] = TASTE_PROPS;
   return (
     <section id="taste" className="relative bg-forest text-white">
       <div className="mx-auto max-w-7xl px-5 py-20 sm:px-8 sm:py-32">
         <div className="text-center">
           <Reveal as="p" className="eyebrow">
-            The Grappa Difference
+            {t.taste.eyebrow}
           </Reveal>
           <Reveal as="h2" delay={0.05} className="display mt-3 text-[clamp(2.5rem,6vw,4.75rem)]">
-            Taste the Difference
+            {t.taste.heading}
           </Reveal>
           <Reveal as="p" delay={0.1} className="mt-3 font-serif text-lg italic text-cream/80">
-            Bistro dining done right.
+            {t.taste.subtitle}
           </Reveal>
         </div>
 
@@ -56,7 +62,7 @@ export default function Taste() {
 
         <Reveal delay={0.1} className="mt-14 flex justify-center">
           <a href="#menu" className="btn btn-gold">
-            View Our Menu
+            {t.taste.cta}
           </a>
         </Reveal>
       </div>

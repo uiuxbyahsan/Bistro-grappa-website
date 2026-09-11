@@ -3,10 +3,23 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { IconArrow } from "./Icons";
+import { useLanguage } from "@/lib/LanguageContext";
+import { fill } from "@/lib/translations";
 
 const PARTY_SIZES = ["1", "2", "3", "4", "5", "6", "7", "8+"];
 
 export default function ReservationForm() {
+  const { t } = useLanguage();
+
+  // Pick the right plural form. Works for English (one/other) and for the
+  // Slavic one/few/many rule used by Bosnian across the sizes shown here.
+  const guestWord = (size) => {
+    const n = parseInt(size, 10) || 0;
+    if (n === 1) return t.reservation.guestsOne;
+    if (n >= 2 && n <= 4) return t.reservation.guestsFew;
+    return t.reservation.guestsMany;
+  };
+
   const [sent, setSent] = useState(false);
   const [form, setForm] = useState({
     name: "",
@@ -22,9 +35,11 @@ export default function ReservationForm() {
     e.preventDefault();
     // No backend wired in: confirm to the guest and hand off to the
     // restaurant's inbox via a pre-filled email so the request isn't lost.
-    const subject = encodeURIComponent(`Table reservation — ${form.name}`);
+    const subject = encodeURIComponent(
+      fill(t.reservation.mailSubject, { name: form.name })
+    );
     const body = encodeURIComponent(
-      `Name: ${form.name}\nContact: ${form.contact}\nDate: ${form.date}\nParty size: ${form.party}\n\n${form.message}`
+      `${t.reservation.mailName}: ${form.name}\n${t.reservation.mailContact}: ${form.contact}\n${t.reservation.mailDate}: ${form.date}\n${t.reservation.mailParty}: ${form.party}\n\n${form.message}`
     );
     if (typeof window !== "undefined") {
       window.location.href = `mailto:info@bistrograppa.ba?subject=${subject}&body=${body}`;
@@ -34,9 +49,9 @@ export default function ReservationForm() {
 
   return (
     <div className="relative rounded-3xl bg-cream p-6 shadow-card sm:p-8">
-      <h3 className="display text-3xl text-forest">Reserve Your Table</h3>
+      <h3 className="display text-3xl text-forest">{t.reservation.heading}</h3>
       <p className="mt-2 font-serif text-sm italic text-forest/60">
-        Tell us when, and we&apos;ll set a place for you.
+        {t.reservation.subtitle}
       </p>
 
       <AnimatePresence mode="wait">
@@ -49,18 +64,20 @@ export default function ReservationForm() {
             className="mt-8 rounded-2xl border border-gold/40 bg-gold/10 p-6 text-center"
           >
             <p className="font-serif text-lg text-forest">
-              Thank you, {form.name || "friend"}.
+              {t.reservation.thanksGreeting}, {form.name || t.reservation.friend}.
             </p>
             <p className="mt-2 font-sans text-sm text-forest/70">
-              Your request is on its way. We&apos;ll confirm your table for{" "}
-              {form.party} on {form.date || "your chosen date"} shortly.
+              {fill(t.reservation.thanksBody, {
+                party: `${form.party} ${guestWord(form.party)}`,
+                date: form.date || t.reservation.thanksDateFallback,
+              })}
             </p>
             <button
               type="button"
               onClick={() => setSent(false)}
               className="btn btn-outline-forest mt-5"
             >
-              Make Another Reservation
+              {t.reservation.makeAnother}
             </button>
           </motion.div>
         ) : (
@@ -74,12 +91,12 @@ export default function ReservationForm() {
           >
             <div>
               <label htmlFor="r-name" className="field-label">
-                Name
+                {t.reservation.name}
               </label>
               <input
                 id="r-name"
                 className="field"
-                placeholder="Your name"
+                placeholder={t.reservation.namePlaceholder}
                 required
                 value={form.name}
                 onChange={update("name")}
@@ -88,12 +105,12 @@ export default function ReservationForm() {
 
             <div>
               <label htmlFor="r-contact" className="field-label">
-                Phone or Email
+                {t.reservation.contact}
               </label>
               <input
                 id="r-contact"
                 className="field"
-                placeholder="So we can confirm"
+                placeholder={t.reservation.contactPlaceholder}
                 required
                 value={form.contact}
                 onChange={update("contact")}
@@ -103,7 +120,7 @@ export default function ReservationForm() {
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <label htmlFor="r-date" className="field-label">
-                  Date
+                  {t.reservation.date}
                 </label>
                 <input
                   id="r-date"
@@ -116,7 +133,7 @@ export default function ReservationForm() {
               </div>
               <div>
                 <label htmlFor="r-party" className="field-label">
-                  Party Size
+                  {t.reservation.party}
                 </label>
                 <select
                   id="r-party"
@@ -126,7 +143,7 @@ export default function ReservationForm() {
                 >
                   {PARTY_SIZES.map((p) => (
                     <option key={p} value={p}>
-                      {p} {p === "1" ? "guest" : "guests"}
+                      {p} {guestWord(p)}
                     </option>
                   ))}
                 </select>
@@ -135,20 +152,20 @@ export default function ReservationForm() {
 
             <div>
               <label htmlFor="r-message" className="field-label">
-                Message
+                {t.reservation.message}
               </label>
               <textarea
                 id="r-message"
                 rows={3}
                 className="field resize-none"
-                placeholder="Any occasion or seating preference?"
+                placeholder={t.reservation.messagePlaceholder}
                 value={form.message}
                 onChange={update("message")}
               />
             </div>
 
             <button type="submit" className="btn btn-gold w-full">
-              Reserve My Table
+              {t.reservation.submit}
               <IconArrow className="h-4 w-4" />
             </button>
           </motion.form>

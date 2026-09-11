@@ -4,6 +4,7 @@ import { Fragment, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { Reveal } from "./Reveal";
 import { MENU } from "@/lib/site";
+import { useLanguage } from "@/lib/LanguageContext";
 
 // Best-fit photo per category (default when a tab is selected).
 const CAT_IMG = {
@@ -18,43 +19,44 @@ const CAT_IMG = {
   "red-wines": "/assets/food/about-interior.jpg",
 };
 
-// Specific dish photo shown when a row is hovered or clicked. Items not listed
-// fall back to the active category's default image.
+// Specific dish photo shown when a row is hovered or clicked, keyed by the
+// item's stable id. Items not listed fall back to the category default image.
 const ITEM_IMG = {
   // Breakfast
-  "Chicken Sandwich": "/assets/food/gallery-chicken-rice.jpg",
-  "Roast Beef Sandwich": "/assets/food/special-ribeye.jpg",
-  "Mozzarella Sandwich": "/assets/food/about-feta-salad.jpg",
-  "Egg Sandwich": "/assets/food/gallery-omelette.jpg",
-  "Fried Eggs": "/assets/food/gallery-omelette.jpg",
-  Omelette: "/assets/food/gallery-omelette.jpg",
-  "Eggs with Steak": "/assets/food/special-ribeye.jpg",
-  "Eggs with Marinated Trout": "/assets/food/special-tuna.jpg",
-  "Eggs with Chicken": "/assets/food/gallery-chicken-rice.jpg",
+  "chicken-sandwich": "/assets/food/gallery-chicken-rice.jpg",
+  "roast-beef-sandwich": "/assets/food/special-ribeye.jpg",
+  "mozzarella-sandwich": "/assets/food/about-feta-salad.jpg",
+  "egg-sandwich": "/assets/food/gallery-omelette.jpg",
+  "fried-eggs": "/assets/food/gallery-omelette.jpg",
+  omelette: "/assets/food/gallery-omelette.jpg",
+  "eggs-steak": "/assets/food/special-ribeye.jpg",
+  "eggs-trout": "/assets/food/special-tuna.jpg",
+  "eggs-chicken": "/assets/food/gallery-chicken-rice.jpg",
   // Starters
-  "Beef Carpaccio": "/assets/food/gallery-carpaccio.jpg",
-  "Red Trout Carpaccio": "/assets/food/about-carpaccio-board.jpg",
-  "Cheese Selection": "/assets/food/about-feta-salad.jpg",
+  "beef-carpaccio": "/assets/food/gallery-carpaccio.jpg",
+  "trout-carpaccio": "/assets/food/about-carpaccio-board.jpg",
+  "cheese-selection": "/assets/food/about-feta-salad.jpg",
   // Salads
-  "Chicken Salad": "/assets/food/gallery-salad-seeds.jpg",
-  "Tuna Salad": "/assets/food/why-tuna-salad.jpg",
-  "Rib Eye Salad": "/assets/food/special-ribeye.jpg",
-  "Feta Cheese & Walnut Salad": "/assets/food/about-feta-salad.jpg",
-  "Salad with Seeds": "/assets/food/gallery-salad-seeds.jpg",
+  "chicken-salad": "/assets/food/gallery-salad-seeds.jpg",
+  "tuna-salad": "/assets/food/why-tuna-salad.jpg",
+  "ribeye-salad": "/assets/food/special-ribeye.jpg",
+  "feta-walnut-salad": "/assets/food/about-feta-salad.jpg",
+  "seed-salad": "/assets/food/gallery-salad-seeds.jpg",
   // Main Dishes
-  "Rib Eye Steak": "/assets/food/special-ribeye.jpg",
-  "Tuna Filet": "/assets/food/special-tuna.jpg",
-  "Chicken Filet": "/assets/food/gallery-chicken-rice.jpg",
-  "Slow-Roasted Veal Shoulder": "/assets/food/special-veal-shank.jpg",
+  "ribeye-steak": "/assets/food/special-ribeye.jpg",
+  "tuna-filet": "/assets/food/special-tuna.jpg",
+  "chicken-filet": "/assets/food/gallery-chicken-rice.jpg",
+  "veal-shoulder": "/assets/food/special-veal-shank.jpg",
   // Pasta
-  "Truffle Pasta": "/assets/food/special-truffle-pasta.jpg",
-  "Chicken Pasta": "/assets/food/gallery-chicken-pasta.jpg",
-  "Rib Eye Pasta": "/assets/food/hero-pasta.jpg",
-  "Pasta with Seeds": "/assets/food/gallery-pasta-seeds.jpg",
-  "Mozzarella Pasta": "/assets/food/hero-risotto.jpg",
+  "truffle-pasta": "/assets/food/special-truffle-pasta.jpg",
+  "chicken-pasta": "/assets/food/gallery-chicken-pasta.jpg",
+  "ribeye-pasta": "/assets/food/hero-pasta.jpg",
+  "seed-pasta": "/assets/food/gallery-pasta-seeds.jpg",
+  "mozzarella-pasta": "/assets/food/hero-risotto.jpg",
 };
 
 export default function Menu() {
+  const { t } = useLanguage();
   const [active, setActive] = useState(MENU[0].id);
   const [displayImg, setDisplayImg] = useState(CAT_IMG[MENU[0].id]);
   const panel = MENU.find((m) => m.id === active);
@@ -65,13 +67,13 @@ export default function Menu() {
   };
 
   // Drinks tabs and any unmapped item fall back to the category default image.
-  const showItem = (name) => setDisplayImg(ITEM_IMG[name] || CAT_IMG[active]);
+  const showItem = (id) => setDisplayImg(ITEM_IMG[id] || CAT_IMG[active]);
 
   return (
     <section id="menu" className="relative bg-cream">
       <div className="mx-auto max-w-6xl px-5 py-20 sm:px-8 sm:py-32">
         <Reveal as="h2" className="display text-center text-[clamp(2.5rem,6vw,4.5rem)] text-forest">
-          Our Menu
+          {t.menu.heading}
         </Reveal>
 
         {/* slash-separated text tabs */}
@@ -90,7 +92,7 @@ export default function Menu() {
                       : "font-normal text-[#999] hover:text-forest"
                   }`}
                 >
-                  {cat.label}
+                  {t.menu.categories[cat.id]}
                 </button>
               </Fragment>
             );
@@ -111,7 +113,7 @@ export default function Menu() {
                   <motion.img
                     key={displayImg}
                     src={displayImg}
-                    alt={`${panel.label} at Bistro Grappa`}
+                    alt={`${t.menu.categories[panel.id]} — Bistro Grappa`}
                     className="absolute inset-0 h-full w-full object-cover"
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
@@ -135,12 +137,14 @@ export default function Menu() {
               >
                 {panel.items.map((item) => (
                   <li
-                    key={item.name}
-                    onMouseEnter={() => showItem(item.name)}
-                    onClick={() => showItem(item.name)}
+                    key={item.id || item.name}
+                    onMouseEnter={() => showItem(item.id)}
+                    onClick={() => showItem(item.id)}
                     className="flex cursor-pointer items-center justify-between rounded-md border-b border-black/[0.08] px-2 py-3.5 transition-colors duration-200 hover:bg-[rgba(4,48,27,0.05)]"
                   >
-                    <span className="font-serif text-base text-forest">{item.name}</span>
+                    <span className="font-serif text-base text-forest">
+                      {(item.id && t.menu.items[item.id]) || item.name}
+                    </span>
                     {item.price ? (
                       <span className="whitespace-nowrap font-sans text-[15px] font-bold text-forest">
                         {item.price} KM

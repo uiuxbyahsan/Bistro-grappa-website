@@ -1,10 +1,15 @@
+"use client";
+
 import { Reveal } from "./Reveal";
 import { IconInstagram, IconFacebook } from "./Icons";
 import { CONTACT, NAV_LINKS } from "@/lib/site";
+import { useLanguage } from "@/lib/LanguageContext";
 
 const FOOTER_LINKS = NAV_LINKS.slice(0, 4); // About | Menu | Gallery | Visit Us
 
 export default function Footer() {
+  const { t } = useLanguage();
+  const year = new Date().getFullYear();
   return (
     <footer className="bg-forest text-white">
       <Reveal className="mx-auto max-w-5xl px-5 pb-10 pt-16 text-center sm:pt-20">
@@ -24,7 +29,7 @@ export default function Footer() {
                 href={l.href}
                 className="font-sans text-xs font-medium uppercase tracking-[0.2em] text-white/80 transition-colors hover:text-gold"
               >
-                {l.label}
+                {t.nav.links[l.key]}
               </a>
             </li>
           ))}
@@ -52,7 +57,8 @@ export default function Footer() {
         </div>
 
         <p className="mt-8 font-sans text-xs tracking-wide text-white/60">
-          2025 Bistro Grappa · {CONTACT.street}, {CONTACT.city}
+          © {year} Bistro Grappa · {CONTACT.street}, {CONTACT.city} ·{" "}
+          {t.footer.rights}
         </p>
       </Reveal>
     </footer>
